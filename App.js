@@ -1,20 +1,64 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+// App.js
 
-export default function App() {
+import React, { useState } from 'react';
+import { View, TextInput, Button, Alert, StyleSheet } from 'react-native';
+import axios from 'axios';
+
+const App = () => {
+  const [name, setName] = useState(''); 'axios';
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleRegister = () => {
+    axios
+      .post('http://192.168.2.108:3000/register', { name, email, password })
+      .then(response => {
+        Alert.alert('Success', response.data.message);
+      })
+      .catch(error => {
+        Alert.alert('Error', error.response.data.error);
+      });
+  };
+
+  const handleLogin = () => {
+    axios
+      .post('http://192.168.2.108:3000/login', { email, password })
+      .then(response => {
+        Alert.alert('Success', response.data.message);
+      })
+      .catch(error => {
+        Alert.alert('Error', error.response.data.error);
+      });
+  };
+
+  
+
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
+      <TextInput style={styles.input} placeholder="Name" onChangeText={setName} />
+      <TextInput style={styles.input} placeholder="Email" onChangeText={setEmail} />
+      <TextInput style={styles.input} placeholder="Password" secureTextEntry onChangeText={setPassword} />
+      <Button style={styles.btn} title="Register" onPress={handleRegister} />
+      <Button style={styles.btn} title="Login" onPress={handleLogin} />
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+  container:{
+    justifyContent:'center',
+    alignItems:'center',
+    flex:1,
   },
-});
+
+  input:{
+    borderWidth:1,
+    borderColor:'lightblue',
+    borderRadius:12,
+    width:'80%',
+    height:40,
+    marginBottom:20,
+  }
+})
+
+export default App;
